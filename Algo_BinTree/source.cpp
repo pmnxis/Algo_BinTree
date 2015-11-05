@@ -1,4 +1,4 @@
-#include <stdio.h>
+ï»¿#include <stdio.h>
 #include <stdlib.h>
 
 #define MAX_DEPTH 10
@@ -162,7 +162,7 @@ void deleteNode(node * root, char input[]) {
 				}
 			}
 			else { break; }
-			// ???¨ù???? ¢¬¢¬??¨ú?¨ú©¬?? 
+			// ???Â¼???? Â¸Â¸??Â¾?Â¾ÃŸ?? 
 			handleHistory = handleHistory->prev;
 			free(handleHistory->next);
 		}
