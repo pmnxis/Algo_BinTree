@@ -94,25 +94,30 @@ exception:
 	return 0;
 }
 
-void insertNode(node * root, char input[]) {
-	node * temp = root;
-	for (int i = 0; i < MAX_DEPTH; i++)
-	{
-		if (input[i] == '0') {
-			//printf(" $ ");
-			if (temp->zero == NULL)temp->zero = mkNode(nil);
-			else 	temp = temp->zero;
-		}
-		else if (input[i] == '1') {
-			//printf(" # ");
-			if (temp->one == NULL)temp->one = mkNode(nil);
-			else 	temp = temp->one;
-		}
+void insertNode(node * target, char input[]) {
+	bool listener = 0;
+
+	if (input[0] == '0') {
+		if (target->zero != NULL)insertNode(target->zero, &input[1]);
 		else {
-			temp->nodeType = key;
-			break;
+			target->zero = mkNode(nil);
+			insertNode(target->zero, &input[1]);
 		}
 	}
+	else if (input[0] == '1') {
+		if (target->one != NULL)insertNode(target->one, &input[1]);
+		else {
+			target->one = mkNode(nil);
+			insertNode(target->one, &input[1]);
+		}
+	}
+	else {
+		if(target != NULL)target->nodeType = key;
+		else {
+			target = mkNode(key);
+		}
+	}
+	return;
 }
 
 bool deleteNode(node * target, char input[])
@@ -155,68 +160,6 @@ exception:
 	return 1;
 }
 
-/*
-void deleteNode(node * root, char input[]) {
-	// progress find first
-	doublelist * history = (doublelist *)malloc(sizeof(doublelist));
-	history->data = root;
-	history->prev = NULL;
-	doublelist * handleHistory = history;
-	node * temp = root;
-
-	int i;
-	for (i = 0; i < MAX_DEPTH; i++)
-	{
-
-		if (input[i] == '0') {
-			handleHistory->next = (doublelist *)malloc(sizeof(doublelist));
-			handleHistory->next->data = temp->zero;
-			handleHistory->next->prev = handleHistory;
-			handleHistory = handleHistory->next;
-
-			if (temp->zero != NULL)temp = temp->zero;
-			else goto exception;
-		}
-		else if (input[i] == '1') {
-			handleHistory->next = (doublelist *)malloc(sizeof(doublelist));
-			handleHistory->next->data = temp->one;
-			handleHistory->next->prev = handleHistory;
-			handleHistory = handleHistory->next;
-
-			if (temp->one != NULL)temp = temp->one;
-			else 	goto exception;
-		}
-		else {
-			break;
-		}
-	}
-
-	// remove 
-	if (temp->zero != NULL || temp->one != NULL)temp->nodeType = nil;
-	else {
-		//WIP
-		while (handleHistory->prev != NULL) {
-			if (handleHistory->data->nodeType == nil) {
-				for (; true; ) {
-					temp = handleHistory->data;
-					if (findEmptyNil(temp) == 0)removeTree(temp);
-					else break;
-				}
-			}
-			else { break; }
-			// ???¼???? ¸¸??¾?¾ß?? 
-			handleHistory = handleHistory->prev;
-			free(handleHistory->next);
-		}
-	}
-	return;
-
-	// error
-exception:
-	printf("delNode Func : Error occured : %s, looper %d\n", input, i);
-	return;
-}
-*/
 node * mkNode(bool type) {
 	//printf(" ^ ");
 	node * temp = (node *)malloc(sizeof(node));
