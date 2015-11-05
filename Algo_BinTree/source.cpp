@@ -36,7 +36,7 @@ struct doublelist {
 
 void insertNode(node * root, char input[]);
 
-void deleteNode(node * root, char input[]);
+bool deleteNode(node * target, char input[]);
 
 node * mkNode(bool type);
 
@@ -115,6 +115,47 @@ void insertNode(node * root, char input[]) {
 	}
 }
 
+bool deleteNode(node * target, char input[])
+{
+	bool listener = 0;
+
+	if (target->nodeType == key)listener = 1;
+
+	if (input[0] == '0') {
+		if (target->zero != NULL)listener = deleteNode(target->zero, &input[1]) || listener;
+		else goto exception;
+	}else if (input[0] == '1') {
+		if (target->one != NULL)listener = deleteNode(target->one, &input[1]) || listener;
+		else goto exception;
+	}
+	else {
+		if (target->nodeType == nil) {
+			free(target);
+			return 0;
+		}
+		else if (target->nodeType == key) {
+			return 1;
+		}
+		else {
+			goto exception;
+			return 1;
+		}
+	}
+
+	if (listener == 0) {
+		free(target);
+		return 0;
+	}
+	else {
+		return 1;
+	}
+
+exception:
+	printf("delNode Func : Error occured : %s, looper\n", input);
+	return 1;
+}
+
+/*
 void deleteNode(node * root, char input[]) {
 	// progress find first
 	doublelist * history = (doublelist *)malloc(sizeof(doublelist));
@@ -149,6 +190,7 @@ void deleteNode(node * root, char input[]) {
 			break;
 		}
 	}
+
 	// remove 
 	if (temp->zero != NULL || temp->one != NULL)temp->nodeType = nil;
 	else {
@@ -174,7 +216,7 @@ exception:
 	printf("delNode Func : Error occured : %s, looper %d\n", input, i);
 	return;
 }
-
+*/
 node * mkNode(bool type) {
 	//printf(" ^ ");
 	node * temp = (node *)malloc(sizeof(node));
