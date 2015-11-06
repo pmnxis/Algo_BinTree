@@ -60,7 +60,7 @@ int main() {
 	char cstrBuff[513];
 	int ii;
 	node * root = mkNode(nil);
-		//(node *)malloc(sizeof(node));
+	//(node *)malloc(sizeof(node));
 
 	//  GET INPUT
 	scanf("%d", &inputAmount);
@@ -94,20 +94,15 @@ exception:
 	return 0;
 }
 
-void insertNode(node * root, char input[]) {
-	node * temp = root;
-	for (int i = 0; i < MAX_DEPTH; i++)
-	{
-		if (input[i] == '0') {
-			printf(" $ ");
-			if (temp->zero == NULL)temp->zero = mkNode(nil);
-			else 	temp = temp->zero;
+void insertNode(node * target, char input[]) {
+
+	if (input[0] == '0') {
+		if (target->zero != NULL)insertNode(target->zero, &input[1]);
+		else {
+			target->zero = mkNode(nil);
+			insertNode(target->zero, &input[1]);
 		}
-		else if (input[i] == '1') {
-			printf(" # ");
-			if (temp->one == NULL)temp->one = mkNode(nil);
-			else 	temp = temp->one;
-		}
+	}
 	else if (input[0] == '1') {
 		if (target->one != NULL)insertNode(target->one, &input[1]);
 		else {
@@ -116,16 +111,16 @@ void insertNode(node * root, char input[]) {
 		}
 	}
 	else {
-		if(target != NULL)target->nodeType = key;
+		if (target != NULL)target->nodeType = key;
 		else {
 			target = mkNode(key);
-}
+		}
 	}
 	return;
 }
 
 bool deleteNode(node * target, char input[])
-	{
+{
 	bool listener = 0;
 
 	if (target->nodeType == key)listener = 1;
@@ -133,35 +128,36 @@ bool deleteNode(node * target, char input[])
 	if (input[0] == '0') {
 		if (target->zero != NULL)listener = deleteNode(target->zero, &input[1]) || listener;
 		else goto exception;
-	}else if (input[0] == '1') {
+	}
+	else if (input[0] == '1') {
 		if (target->one != NULL)listener = deleteNode(target->one, &input[1]) || listener;
-			else goto exception;
-		}
-		else {
+		else goto exception;
+	}
+	else {
 		if (target->nodeType == nil) {
 			free(target);
 			return 0;
 		}
 		else if (target->nodeType == key) {
 			return 1;
-	}
-	else {
+		}
+		else {
 			goto exception;
 			return 1;
-				}
-			}
+		}
+	}
 
 	if (listener == 0) {
 		free(target);
 		return 0;
-		}
+	}
 	else {
 		return 1;
 	}
 
 exception:
-	printf("delNode Fucn : Error occured : %s, looper %d", input, i);
-	return;
+	printf("delNode Func : Error occured : %s, looper\n", input);
+	return 1;
 }
 
 node * mkNode(bool type) {
