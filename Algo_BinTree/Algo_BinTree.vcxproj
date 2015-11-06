@@ -120,6 +120,16 @@
   <ItemGroup>
     <ClCompile Include="source.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="testdata\1.in" />
+    <None Include="testdata\1.out" />
+    <None Include="testdata\2.in" />
+    <None Include="testdata\2.out" />
+    <None Include="testdata\3.in" />
+    <None Include="testdata\3.out" />
+    <None Include="testdata\4.in" />
+    <None Include="testdata\4.out" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -19,4 +19,30 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="testdata\1.in">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="testdata\1.out">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="testdata\2.in">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="testdata\2.out">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="testdata\3.in">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="testdata\3.out">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="testdata\4.in">
+      <Filter>소스 파일</Filter>
+    </None>
+    <None Include="testdata\4.out">
+      <Filter>소스 파일</Filter>
+    </None>
+  </ItemGroup>
 </Project>

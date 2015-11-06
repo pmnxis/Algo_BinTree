@@ -36,7 +36,7 @@ struct doublelist {
 
 void insertNode(node * root, char input[]);
 
-bool deleteNode(node * pretarget, node * target, char input[]);
+bool deleteNode(node * target, char input[]);
 
 node * mkNode(bool type);
 
@@ -51,7 +51,7 @@ void postorder_tranversal(node * target);
 
 bool tellType(node * target);
 
-bool detectNilKeyProblem(node * target);
+bool findEmptyNil(node * target);
 
 void removeTree(node * target);
 
@@ -70,7 +70,7 @@ int main() {
 			insertNode(root, &cstrBuff[1]);
 		}
 		else if (cstrBuff[0] == '-') {
-			deleteNode(NULL, root, &cstrBuff[1]);
+			deleteNode(root, &cstrBuff[1]);
 		}
 		else {
 			goto exception;
@@ -119,77 +119,45 @@ void insertNode(node * target, char input[]) {
 	return;
 }
 
-bool deleteNode(node * pretarget , node * target, char input[])
+bool deleteNode(node * target, char input[])
 {
 	bool listener = 0;
-	int or01 = -1;
+
+	if (target->nodeType == key)listener = 1;
 
 	if (input[0] == '0') {
-		printf("0");
-		or01 = 0;
-		if (target->zero != NULL) { listener = deleteNode(target, target->zero, &input[1]) || listener; }
+		if (target->zero != NULL)listener = deleteNode(target->zero, &input[1]) || listener;
 		else goto exception;
 	}
 	else if (input[0] == '1') {
-		printf("1");
-		or01 = 1;
-		if (target->one != NULL)listener = deleteNode(target, target->one, &input[1]) || listener;
+		if (target->one != NULL)listener = deleteNode(target->one, &input[1]) || listener;
 		else goto exception;
 	}
 	else {
-		printf(" ]- ");
-		if (target->zero == NULL && target->one == NULL) {
-			printf(" nil removed\n");
+		if (target->nodeType == nil) {
 			free(target);
-			//   만약 1이 리턴되면 이제 그앞 재귀프로세서는 후삭제 확인을 해야한다고 알려주는것이다.
-			//  만약 0이 리턴되면 그럴필요없이 끝내도 된다.
-			return 1;
+			return 0;
 		}
 		else if (target->nodeType == key) {
-			//free(target);
-			return 0;
+			return 1;
 		}
 		else {
 			goto exception;
-			return 0;
+			return 1;
 		}
 	}
 
-	if (listener == 0)return 0;
-	else if(listener == 1){
-		// after get returned 
-		if (or01 == 0) {
-			if (pretarget == NULL) {
-				goto exception;
-			}
-			else {
-				if (pretarget->one == NULL) {
-					free(target);
-					pretarget->zero = NULL;
-					return 1;
-				}
-			}
-		}
-		else if (or01 == 1) {
-			if (pretarget == NULL) {
-				goto exception;
-			}
-			else {
-				if (pretarget->zero == NULL) {
-					free(target);
-					pretarget->one = NULL;
-					return 1;
-				}
-			}
-
-		}
+	if (listener == 0) {
+		free(target);
+		return 0;
+	}
+	else {
+		return 1;
 	}
 
-
-
-		exception:
+exception:
 	printf("delNode Func : Error occured : %s, looper\n", input);
-	return 0;
+	return 1;
 }
 
 node * mkNode(bool type) {
@@ -233,21 +201,22 @@ bool tellType(node * target) {
 	return target->nodeType;
 }
 
-bool detectNilKeyProblem(node * target) {
-	bool t0 = 0, t1 = 0;
+bool findEmptyNil(node * target) {
 	if (target->one == NULL && target->zero == NULL) {
-		if (target->nodeType == nil)return 1;
-		else return 0;
+		if (target->nodeType == nil)return 0;
+		else return 1;
+
 	}
 
+	if (findEmptyNil(target) == nil)return 0;
 	if (target->zero != NULL) {
-		if (target->zero->nodeType == key)t1 =
-			t0 = detectNilKeyProblem(target->zero);
+		if (findEmptyNil(target->zero) == nil)return 0;
 	}
 	if (target->one != NULL) {
-		t1 = detectNilKeyProblem(target->one);
+		if (findEmptyNil(target->one) == nil)return 0;
 	}
-	return (t0 || t1);
+
+	else return 1;
 }
 
 void removeTree(node * target) {
