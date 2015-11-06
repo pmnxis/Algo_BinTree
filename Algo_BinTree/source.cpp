@@ -36,7 +36,7 @@ struct doublelist {
 
 void insertNode(node * root, char input[]);
 
-bool deleteNode(node * target, char input[]);
+bool deleteNode(node * pretarget, node * target, char input[]);
 
 node * mkNode(bool type);
 
@@ -70,7 +70,7 @@ int main() {
 			insertNode(root, &cstrBuff[1]);
 		}
 		else if (cstrBuff[0] == '-') {
-			deleteNode(root, &cstrBuff[1]);
+			deleteNode(NULL, root, &cstrBuff[1]);
 		}
 		else {
 			goto exception;
@@ -119,49 +119,77 @@ void insertNode(node * target, char input[]) {
 	return;
 }
 
-bool deleteNode(node * target, char input[])
+bool deleteNode(node * pretarget , node * target, char input[])
 {
 	bool listener = 0;
 	int or01 = -1;
-	printf("Entered deleteNode - %s  -[ ", input);
-	if (target->nodeType == key)listener = 1;
 
 	if (input[0] == '0') {
 		printf("0");
 		or01 = 0;
-		if (target->zero != NULL) { listener = deleteNode(target->zero, &input[1]) || listener; }
+		if (target->zero != NULL) { listener = deleteNode(target, target->zero, &input[1]) || listener; }
 		else goto exception;
 	}
 	else if (input[0] == '1') {
 		printf("1");
 		or01 = 1;
-		if (target->one != NULL)listener = deleteNode(target->one, &input[1]) || listener;
+		if (target->one != NULL)listener = deleteNode(target, target->one, &input[1]) || listener;
 		else goto exception;
 	}
 	else {
 		printf(" ]- ");
-		if (target->nodeType == nil) {
+		if (target->zero == NULL && target->one == NULL) {
 			printf(" nil removed\n");
 			free(target);
-			return 0;
+			//   만약 1이 리턴되면 이제 그앞 재귀프로세서는 후삭제 확인을 해야한다고 알려주는것이다.
+			//  만약 0이 리턴되면 그럴필요없이 끝내도 된다.
+			return 1;
 		}
 		else if (target->nodeType == key) {
-			free(target);
-			return 1;
+			//free(target);
+			return 0;
 		}
 		else {
 			goto exception;
-			return 1;
+			return 0;
 		}
 	}
 
-	if ()
+	if (listener == 0)return 0;
+	else if(listener == 1){
+		// after get returned 
+		if (or01 == 0) {
+			if (pretarget == NULL) {
+				goto exception;
+			}
+			else {
+				if (pretarget->one == NULL) {
+					free(target);
+					pretarget->zero = NULL;
+					return 1;
+				}
+			}
+		}
+		else if (or01 == 1) {
+			if (pretarget == NULL) {
+				goto exception;
+			}
+			else {
+				if (pretarget->zero == NULL) {
+					free(target);
+					pretarget->one = NULL;
+					return 1;
+				}
+			}
+
+		}
+	}
 
 
 
 		exception:
 	printf("delNode Func : Error occured : %s, looper\n", input);
-	return 1;
+	return 0;
 }
 
 node * mkNode(bool type) {
