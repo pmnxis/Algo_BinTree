@@ -60,7 +60,8 @@ int main() {
 	char cstrBuff[513];
 	char passBuff[512];
 	int ii;
-	node * root = (node *)malloc(sizeof(node));
+	node * root = mkNode(nil);
+		//(node *)malloc(sizeof(node));
 
 	//  GET INPUT
 	scanf("%d", &inputAmount);
@@ -90,7 +91,7 @@ int main() {
 
 	// error
 exception:
-	printf("main-Parse Func : Error occured : %s, looper %d", cstrBuff, ii);
+	printf("main-Parse Func : Error occured : %s, looper %d\n", cstrBuff, ii);
 	return 0;
 }
 
@@ -99,12 +100,12 @@ void insertNode(node * root, char input[]) {
 	for (int i = 0; i < MAX_DEPTH; i++)
 	{
 		if (input[i] == '0') {
-			printf(" $ ");
+			//printf(" $ ");
 			if (temp->zero == NULL)temp->zero = mkNode(nil);
 			else 	temp = temp->zero;
 		}
 		else if (input[i] == '1') {
-			printf(" # ");
+			//printf(" # ");
 			if (temp->one == NULL)temp->one = mkNode(nil);
 			else 	temp = temp->one;
 		}
@@ -171,20 +172,20 @@ void deleteNode(node * root, char input[]) {
 
 	// error
 exception:
-	printf("delNode Fucn : Error occured : %s, looper %d", input, i);
+	printf("delNode Fucn : Error occured : %s, looper %d\n", input, i);
 	return;
 }
 
 node * mkNode(bool type) {
-	printf(" ^ ");
+	//printf(" ^ ");
 	node * temp = (node *)malloc(sizeof(node));
-	printf(" & ");
+	//printf(" & ");
 	if (type == nil)temp->nodeType = nil;
 	else temp->nodeType = key;
-	printf(" ( ");
+	//printf(" ( ");
 	temp->zero = NULL;
 	temp->one = NULL;
-	printf(" ) ");
+	//printf(" ) ");
 	return temp;
 }
 
