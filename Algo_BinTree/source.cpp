@@ -65,6 +65,7 @@ int main() {
 	//  GET INPUT
 	scanf("%d", &inputAmount);
 	for (ii = 0; ii < inputAmount; ii++) {
+		memset(cstrBuff, NULL, sizeof(cstrBuff));
 		scanf("%s", cstrBuff);
 		if (cstrBuff[0] == '+') {
 			insertNode(root, &cstrBuff[1]);
@@ -128,28 +129,32 @@ bool deleteNode(node * pretarget, node * target, char input[])
 		printf("0");
 		or01 = 0;
 		if (target->zero != NULL) { listener = deleteNode(target, target->zero, &input[1]) || listener; }
-		else goto exception;
+		//else goto exception;
 	}
 	else if (input[0] == '1') {
 		printf("1");
 		or01 = 1;
-		if (target->one != NULL)listener = deleteNode(target, target->one, &input[1]) || listener;
-		else goto exception;
+		if (target->one != NULL) { listener = deleteNode(target, target->one, &input[1]) || listener; }
+		//else goto exception;
 	}
 	else {
 		printf(" ]- ");
 		if (target->zero == NULL && target->one == NULL) {
 			printf(" nil removed\n");
 			free(target);
+			if (or01 == 0)pretarget->zero = NULL;
+			else if (or01 == 1)pretarget->one = NULL;
 			//   만약 1이 리턴되면 이제 그앞 재귀프로세서는 후삭제 확인을 해야한다고 알려주는것이다.
 			//  만약 0이 리턴되면 그럴필요없이 끝내도 된다.
 			return 1;
 		}
 		else if (target->nodeType == key) {
 			//free(target);
+			target->nodeType = nil;
 			return 0;
 		}
 		else {
+			printf("이건진짜머임\n");
 			goto exception;
 			return 0;
 		}
@@ -160,32 +165,40 @@ bool deleteNode(node * pretarget, node * target, char input[])
 		// after get returned 
 		if (or01 == 0) {
 			if (pretarget == NULL) {
+				printf("pretarget is null\n");
 				goto exception;
 			}
 			else {
-				if (pretarget->one == NULL) {
-					free(target);
-					pretarget->zero = NULL;
+				if (pretarget->one == NULL && pretarget->nodeType == nil) {
+					free(pretarget);
 					return 1;
 				}
+				else{pretarget->zero = NULL;
+					return 0;
+				} 
 			}
 		}
 		else if (or01 == 1) {
 			if (pretarget == NULL) {
+				printf("pretarget is null\n");
 				goto exception;
 			}
 			else {
-				if (pretarget->zero == NULL) {
-					free(target);
-					pretarget->one = NULL;
+				if (pretarget->zero == NULL && pretarget->nodeType == nil) {
+					free(pretarget);
 					return 1;
+				}
+				else {
+					pretarget->one = NULL;
+					return 0;
+
 				}
 			}
 
 		}
 	}
 
-
+	return 0;
 
 exception:
 	printf("delNode Func : Error occured : %s, looper\n", input);
