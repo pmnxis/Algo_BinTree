@@ -19,3 +19,7 @@ http://bin.jvnv.net/f/fWhpp/OJ-HW-pt2-TREEWORKS.pdf
 자세한 테스트는 하지않았지만 세종대학교에서 사용하는 채점시스템에서 C와 C++ 따로 컴파일 되는 것을 확인했습니다.
 
 비쥬얼스튜디오에서 컴파일을하면 자동으로 마지막에 batch의 pause가 실행됩니다. (제 컴퓨터가 Ctrl + F5해도 그냥 꺼져서..)
+
+과제 제출 기간을 넘은 시점에서 public으로 수정합니다.
+
+혹시라도 공개를 원치 않으면 pmnxis@live.co.kr로 ... 
